@@ -1,7 +1,10 @@
-NEWGEN12
+How To Generate N Consecutive Twin Primes Version 2.0
 -------------------------
-This is the current file to be a companion to the paper, older files are retained in testing category which represent me trying to figure out how to make the framework I had in my mind work.
+This is a new and improved version of my generate N consecutive twin prime function.
+The function is now counting forwards in twin primes, and it doesnt even know what primes are.
 
+This function will generate verified twin prime centers of size ~26 000
+Using only the Primes up to the number 60
 ====================================================
 
 
