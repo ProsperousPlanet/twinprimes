@@ -3645,6 +3645,131 @@ theorem twin_prime_logic_yes_is_complete_pascal_step
         r
 
 
+def PascalTwinState
+    (P : List Nat)
+    (c R : Nat) : Prop :=
+  InteriorClockState P c
+    ∧
+  TwinPascalBand P R
+    ∧
+  (pascalEdgeDistance
+      P
+      (twinPascalDegree P)
+      = 2)
+/-!
+-- =====================================================================
+-- 14. Reddit Requested twin-prime formulation
+-- =====================================================================
+--
+-- The requested external formulation is
+--
+--     ∃ p : Nat,
+--       n ≤ p ∧
+--       Prime p ∧
+--       Prime (p + 2).
+--
+-- This file uses PrimeNat rather than Mathlib's Prime predicate, so the
+-- same statement in the vocabulary already proved here is
+--
+--     ∃ p : Nat,
+--       n ≤ p ∧
+--       PrimeNat p ∧
+--       PrimeNat (p + 2).
+--
+-- Our construction uses the center c of the pair instead:
+--
+--     c - 1, c + 1.
+--
+-- The following theorem proves that the two formulations are exactly
+-- equivalent under the coordinate change
+--
+--     p = c - 1.
+-- =====================================================================
+-/
+
+def TwinPrimeCenterForm : Prop :=
+  ∀ n : Nat,
+    ∃ c : Nat,
+      n + 1 ≤ c
+        ∧
+      PrimeNat (c - 1)
+        ∧
+      PrimeNat (c + 1)
+
+
+def TwinPrimeConjecture : Prop :=
+  ∀ n : Nat,
+    ∃ p : Nat,
+      n ≤ p
+        ∧
+      PrimeNat p
+        ∧
+      PrimeNat (p + 2)
+
+
+theorem twin_prime_center_form_iff_twin_prime_conjecture :
+    TwinPrimeCenterForm ↔ TwinPrimeConjecture := by
+
+  constructor
+
+  · intro hcenter n
+
+    obtain ⟨c, hlarge, hleft, hright⟩ :=
+      hcenter n
+
+    refine
+      ⟨
+        c - 1,
+        ?_,
+        hleft,
+        ?_
+      ⟩
+
+    · omega
+
+    · have heq :
+          (c - 1) + 2 = c + 1 := by
+        omega
+
+      rw [heq]
+
+      exact hright
+
+
+  · intro htpc n
+
+    obtain ⟨p, hlarge, hp, hp2⟩ :=
+      htpc n
+
+    refine
+      ⟨
+        p + 1,
+        ?_,
+        ?_,
+        ?_
+      ⟩
+
+    · omega
+
+    · have heq :
+          (p + 1) - 1 = p := by
+        omega
+
+      rw [heq]
+
+      exact hp
+
+    · have heq :
+          (p + 1) + 1 = p + 2 := by
+        omega
+
+      rw [heq]
+
+      exact hp2
+
+
+#check twin_prime_center_form_iff_twin_prime_conjecture
+
 #check locked23_is_pascal_zero_zero
 #check prime_logic_yes_iff_pascal_yes
 #check twin_prime_logic_yes_is_complete_pascal_step
